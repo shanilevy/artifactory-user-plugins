@@ -45,16 +45,8 @@ executions {
 }
 
 /**
- * Function to archive old build artifacts by moving them from a source repository to an "archive"
- * repository based on some archive policy (how old the artifact is, when it was last updated, the
- * last time it was downloaded, properties the artifact has, etc.). The artifact is re-deployed
- * with a 1-byte size file to preserve the record in Artifactory for auditing and history purposes.
- * All of the properties are preserved and some additional ones are set.
- *
- * This is done to preserve disk space on the server while keeping all auditing and history about
- * the artifacts that are archived. An example usage is to archive old product build artifacts
- * that are not used in a meaningful way within an organization.
  */
+
 private moveScannedArtifacts(
         log,
         filePattern,
