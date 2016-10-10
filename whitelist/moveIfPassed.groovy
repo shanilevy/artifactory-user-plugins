@@ -23,54 +23,6 @@ import org.artifactory.common.StatusHolder
 
 /**
  * Example REST call(s):
- * 1. Archive any artifact over 30 days old:
- *    curl -X POST -v -u <admin_user>:<admin_password> "http://localhost:8080/artifactory/api/plugins/execute/archive_old_artifacts?params=ageDays=30"
- * 2. Archive any artifact that is 30 days old and has the following properties set:
- *    curl -X POST -v -u <admin_user>:<admin_password> "http://localhost:8080/artifactory/api/plugins/execute/archive_old_artifacts?params=ageDays=30|includePropertySet=deleteme:true;junk:true"
- * 3. Archive any artifact that has not been downloaded in 60 days, excluding those with a certain property set:
- *    curl -X POST -v -u <admin_user>:<admin_password> "http://localhost:8080/artifactory/api/plugins/execute/archive_old_artifacts?params=lastDownloadedDays=60|excludePropertySet=keeper:true"
- * 4. Archive only *.tgz files that are 30 days old and have not been downloaded in 15 days:
- *    curl -X POST -v -u <admin_user>:<admin_password> "http://localhost:8080/artifactory/api/plugins/execute/archive_old_artifacts?params=filePattern=*.tgz|ageDays=30|lastDownloadedDays=15"
- * 5. Archive any *.tgz artifact that is 30 days old and is tagged with artifact.delete:
- *    curl -X POST -v -u <admin_user>:<admin_password> "http://localhost:8080/artifactory/api/plugins/execute/archive_old_artifacts?params=filePattern=*.tgz|ageDays=30|includePropertySet=artifact.delete"
- * 6. Archive any *.tgz artifact that is 15 days old and is tagged with artifact.delete=true:
- *    curl -X POST -v -u <admin_user>:<admin_password> "http://localhost:8080/artifactory/api/plugins/execute/archive_old_artifacts?params=filePattern=*.tgz|ageDays=15|includePropertySet=artifact.delete:true"
- *
- * Available 'time period' archive policies:
- * 1. lastModified      the last time the artifact was modified
- * 2. lastUpdated       the last time the artifact was updated
- * 3. created           the creation date of the artifact
- * 4. lastDownloaded    the last time the artifact was downloaded
- * 5. age               the age of the artifact
- * (NOTE: the time period archive policies are all specified in number of days)
- *
- * Available 'property' archive policies:
- * 1. includePropertySet   the artifact will be archived if it possesses all of
- *    the passed in properties
- * 2. excludePropertySet   the artifact will not be archived if it possesses all
- *    of the passed in properties
- * (NOTE: property set format ==> prop[:value1[;prop2[:value2]......[;propN[:valueN]]])
- *        A property key must be provided, but a corresponding value is not necessary.
- *        If a property is set without a value, then a check is made for just the key.
- *
- * Available artifact keep policy:
- * 1. numKeepArtifacts      the number of artifacts to keep per directory
- * (NOTE: This allows one to keep X number of artifacts (based on natural directory sort
- *        per directory. So, if your artifacts are lain out in a flat directory structure,
- *        you can keep the last X artifacts in each directory with this setting.))
- *
- * One can set any number of 'time period' archive policies as well as any number of include and exclude
- * attribute sets. It is up to the caller to decide how best to archive artifacts. If no archive policy
- * parameters are sent in, the plugin aborts in order to not allow default deleting of every artifact.
- *
- * The 'archive' process performs the following:
- * 1. Grabs all of the currently set properties on the artifact
- * 2. Does a deploy over top of the artifact with a 1-byte size file (to conserve space)
- * 3. Adds all of the previously held attributes to the newly deployed 1-byte size artifact
- * 4. Moves the artifact from the source repository to the destination repository specified
- * 5. Adds a property containing the archive timestamp to the artifact
- *
- * @author Adam Kunk
  */
 
 executions {
